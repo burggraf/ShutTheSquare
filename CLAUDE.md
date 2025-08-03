@@ -147,6 +147,25 @@ The following specialized agents are available in `.claude/agents/` to assist wi
 - Multiplayer testing using ParrelSync and device deployment
 - Build validation and deployment process verification
 
+## Development Plan & Progress Tracking
+
+### Master Development Plan
+**Primary Reference**: `Development_Plan_Checklist.md` - Comprehensive 24-week development plan with phase-by-phase milestones, agent coordination strategy, and progress tracking.
+
+**Key Phases**:
+- **Phase 1 (Weeks 1-4)**: Core Foundation - Single player game loop
+- **Phase 2 (Weeks 5-8)**: Local Multiplayer - 4-player local game  
+- **Phase 3 (Weeks 9-12)**: Network Foundation - Online multiplayer
+- **Phase 4 (Weeks 13-16)**: Platform Ready - Mobile optimization
+- **Phase 5 (Weeks 17-24)**: Advanced Features - Polish and launch
+
+### Progress Tracking
+- **Weekly Reviews**: Check Development_Plan_Checklist.md every Monday for progress assessment
+- **Go/No-Go Checkpoints**: Week 4, 8, 12, 16 with defined success criteria
+- **Risk Monitoring**: Timeline, technical, and resource risk assessment
+
+**Current Status**: Foundation Phase (Week 1) - Setting up Unity packages and core game mechanics
+
 ## Agent Usage Guidelines
 
 ### When to Use Agents
@@ -160,3 +179,6 @@ The following specialized agents are available in `.claude/agents/` to assist wi
 - Mobile Performance Specialist optimizes for mobile platforms
 - Network Specialist adds multiplayer functionality
 - Testing Specialist validates across platforms and devices
+
+### Phase-Based Agent Priority
+Refer to `Development_Plan_Checklist.md` for detailed agent coordination strategy by development phase.
