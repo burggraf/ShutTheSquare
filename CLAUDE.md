@@ -106,3 +106,57 @@ Use conditional compilation directives:
 - **Device Testing**: Regular testing on iOS and Android for mobile-specific features
 - **Network Testing**: Local and remote multiplayer validation
 - **Performance Testing**: Frame rate and memory usage monitoring on target devices
+
+## Available Specialized Agents
+
+The following specialized agents are available in `.claude/agents/` to assist with different aspects of development:
+
+### 1. Unity Game Developer (`unity-game-developer.md`)
+**Purpose**: Core Unity game development and C# scripting
+**Use For**: 
+- Implementing game mechanics (dice rolling, tile selection, scoring)
+- Unity component architecture and scene management
+- Game state systems and singleton patterns
+- Unity prefab systems and asset organization
+- UI implementation and Unity-specific debugging
+
+### 2. Mobile Performance Specialist (`mobile-performance-specialist.md`)
+**Purpose**: Mobile optimization and platform-specific features
+**Use For**:
+- iOS/Android performance optimization and 60 FPS maintenance
+- Mobile input systems (accelerometer shake detection, touch controls)
+- Cross-platform development patterns and conditional compilation
+- Battery optimization and graphics settings
+- Platform-specific build configurations
+
+### 3. Multiplayer Network Specialist (`multiplayer-network-specialist.md`)
+**Purpose**: Unity Netcode and multiplayer networking
+**Use For**:
+- Unity Netcode for GameObjects implementation
+- Server-authoritative networking with client prediction
+- Unity Gaming Services integration (Authentication, Relay, Matchmaker)
+- Network state synchronization and RPC systems
+- Mobile networking optimization and connection management
+
+### 4. Mobile Testing Specialist (`mobile-testing-specialist.md`)
+**Purpose**: Cross-platform testing and validation
+**Use For**:
+- iOS/Android compatibility testing and device validation
+- Performance testing and profiling on mobile devices
+- Accelerometer and touch input testing across devices
+- Multiplayer testing using ParrelSync and device deployment
+- Build validation and deployment process verification
+
+## Agent Usage Guidelines
+
+### When to Use Agents
+- **Proactively**: Agents will engage automatically for their areas of expertise
+- **On-demand**: Request specific agents by mentioning their domain (e.g., "mobile performance", "networking", "Unity development")
+- **Code Reviews**: Agents will provide specialized feedback during code reviews
+
+### Agent Coordination
+- Agents work together on complex features that span multiple domains
+- Unity Game Developer handles core implementation
+- Mobile Performance Specialist optimizes for mobile platforms
+- Network Specialist adds multiplayer functionality
+- Testing Specialist validates across platforms and devices
