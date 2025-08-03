@@ -8,7 +8,7 @@ This is "Shut the Square", a Unity mobile game project that adapts the classic "
 
 ## Unity Configuration
 
-- **Unity Version**: 6000.1.14f1 (Unity 6.1)
+- **Unity Version**: 2022.3 LTS (REQUIRED - Do not use Unity 6.1 or other versions)
 - **Render Pipeline**: Universal Render Pipeline (URP) for mobile optimization
 - **Target Platforms**: iOS 12.0+ and Android API 24+
 - **Performance Target**: 60 FPS on target devices
@@ -16,7 +16,7 @@ This is "Shut the Square", a Unity mobile game project that adapts the classic "
 ## Development Commands
 
 ### Building the Project
-- Open project in Unity 6.1 editor at `ShutTheSquare/`
+- Open project in Unity 2022.3 LTS editor at `ShutTheSquare/`
 - Build for iOS: File → Build Settings → iOS → Build
 - Build for Android: File → Build Settings → Android → Build
 

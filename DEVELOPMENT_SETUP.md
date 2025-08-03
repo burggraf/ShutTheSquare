@@ -3,7 +3,7 @@
 ## Project Status ✅
 
 ### Completed Setup:
-- ✅ Unity 6.1 (6000.1.14f1) installed
+- ✅ Unity 2022.3 LTS installed
 - ✅ Unity project created at `/Users/markb/dev/shutthesquare/ShutTheSquare/`
 - ✅ Basic folder structure organized
 - ✅ Core game scripts created (GameManager, GameConstants, MobileInputDetector)
@@ -85,7 +85,7 @@ ShutTheSquare/
 ## Development Workflow
 
 1. **Design Phase**: Following comprehensive PRD specifications
-2. **Implementation**: Using Unity 6.1 with mobile-first approach  
+2. **Implementation**: Using Unity 2022.3 LTS with mobile-first approach  
 3. **Testing**: Cross-platform testing on iOS and Android devices
 4. **Deployment**: Through Unity Cloud Build and platform stores
 
@@ -101,7 +101,7 @@ Once mobile modules are installed:
 
 ## Tools and Environment
 
-- **Unity Version**: 6000.1.14f1 (Unity 6.1)
+- **Unity Version**: 2022.3 LTS
 - **Platform**: macOS Darwin 24.5.0
 - **Git**: Repository initialized with Unity .gitignore
 - **Development**: Mobile-first approach with desktop testing support
