@@ -1,17 +1,27 @@
 using UnityEngine;
-using Unity.Netcode;
+using System;
 
 namespace ShutTheSquare.Core
 {
-    public class GameManager : NetworkBehaviour
+    public class GameManager : MonoBehaviour
     {
         [Header("Game State")]
         [SerializeField] private GameState currentGameState = GameState.WaitingForPlayers;
+        [SerializeField] private BoardManager.PlayerSide currentPlayerTurn = BoardManager.PlayerSide.North;
         
         [Header("Mobile Optimization")]
         [SerializeField] private bool enableMobileOptimizations = true;
         
+        // Singleton instance
         public static GameManager Instance { get; private set; }
+        
+        // Events
+        public event Action<GameState> OnGameStateChanged;
+        public event Action<BoardManager.PlayerSide> OnPlayerTurnChanged;
+        
+        // Component references
+        private BoardManager boardManager;
+        private DiceManager diceManager;
         
         private void Awake()
         {
@@ -27,63 +37,140 @@ namespace ShutTheSquare.Core
             }
         }
         
+        private void Start()
+        {
+            InitializeGameComponents();
+            SetGameState(GameState.GameStarting);
+        }
+        
         private void InitializeMobileSettings()
         {
             if (enableMobileOptimizations)
             {
-                // Set target frame rate for mobile
                 Application.targetFrameRate = GameConstants.TARGET_FRAMERATE;
-                
-                // Disable screen dimming during gameplay
                 Screen.sleepTimeout = SleepTimeout.NeverSleep;
-                
-                // Configure for mobile performance
                 QualitySettings.vSyncCount = 0;
                 
 #if UNITY_ANDROID || UNITY_IOS
-                // Mobile-specific optimizations
-                QualitySettings.antiAliasing = 2; // 2x MSAA for mobile
-                
-                // Configure accelerometer for shake detection
-                Input.gyro.enabled = true;
+                QualitySettings.antiAliasing = 2;
 #endif
             }
         }
         
-        public override void OnNetworkSpawn()
+        private void InitializeGameComponents()
         {
-            if (IsServer)
+            boardManager = FindObjectOfType<BoardManager>();
+            diceManager = FindObjectOfType<DiceManager>();
+            
+            if (diceManager != null)
             {
-                NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-                NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+                diceManager.OnDiceRollComplete += OnDiceRollComplete;
+                diceManager.OnDiceRollStarted += OnDiceRollStarted;
             }
         }
         
-        private void OnClientConnected(ulong clientId)
+        public void StartGame()
         {
-            Debug.Log($"Client {clientId} connected to game");
-            // Handle player joining logic
+            SetGameState(GameState.GameStarting);
+            StartNewRound();
         }
         
-        private void OnClientDisconnected(ulong clientId)
+        private void StartNewRound()
         {
-            Debug.Log($"Client {clientId} disconnected from game");
-            // Handle player leaving logic
+            SetGameState(GameState.PlayerTurn);
+            OnPlayerTurnChanged?.Invoke(currentPlayerTurn);
+        }
+        
+        public void RollDice()
+        {
+            if (currentGameState == GameState.PlayerTurn && diceManager != null)
+            {
+                SetGameState(GameState.RollingDice);
+                diceManager.RollDice();
+            }
+        }
+        
+        private void OnDiceRollStarted()
+        {
+            Debug.Log("Dice rolling started");
+        }
+        
+        private void OnDiceRollComplete(int die1Value, int die2Value)
+        {
+            int totalValue = die1Value + die2Value;
+            Debug.Log($"Dice roll complete: {die1Value} + {die2Value} = {totalValue}");
+            
+            if (boardManager != null)
+            {
+                var availableCombinations = boardManager.GetValidCombinations(currentPlayerTurn, totalValue);
+                if (availableCombinations.Count > 0)
+                {
+                    SetGameState(GameState.ChoosingTiles);
+                }
+                else
+                {
+                    Debug.Log("No valid moves available - turn ending");
+                    EndPlayerTurn();
+                }
+            }
+        }
+        
+        public void SelectTile(int tileNumber)
+        {
+            if (currentGameState == GameState.ChoosingTiles && boardManager != null)
+            {
+                bool success = boardManager.ShutTile(currentPlayerTurn, tileNumber);
+                if (success)
+                {
+                    if (boardManager.CheckWinCondition(currentPlayerTurn))
+                    {
+                        SetGameState(GameState.GameFinished);
+                        Debug.Log($"Player {currentPlayerTurn} wins!");
+                    }
+                    else
+                    {
+                        EndPlayerTurn();
+                    }
+                }
+            }
+        }
+        
+        private void EndPlayerTurn()
+        {
+            SetGameState(GameState.PlayerTurn);
+            OnPlayerTurnChanged?.Invoke(currentPlayerTurn);
         }
         
         public void SetGameState(GameState newState)
         {
-            if (IsServer)
-            {
-                currentGameState = newState;
-                OnGameStateChanged(newState);
-            }
+            currentGameState = newState;
+            OnGameStateChanged?.Invoke(newState);
+            Debug.Log($"Game state changed to: {newState}");
         }
         
-        private void OnGameStateChanged(GameState newState)
+        public GameState GetCurrentGameState()
         {
-            Debug.Log($"Game state changed to: {newState}");
-            // Broadcast state change to clients
+            return currentGameState;
+        }
+        
+        public BoardManager.PlayerSide GetCurrentPlayer()
+        {
+            return currentPlayerTurn;
+        }
+        
+        public bool CanRollDice()
+        {
+            return currentGameState == GameState.PlayerTurn && 
+                   (diceManager == null || !diceManager.IsRolling);
+        }
+        
+        private void OnDestroy()
+        {
+            if (diceManager != null)
+            {
+                diceManager.OnDiceRollComplete -= OnDiceRollComplete;
+                diceManager.OnDiceRollStarted -= OnDiceRollStarted;
+            }
         }
     }
     
